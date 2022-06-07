@@ -1,0 +1,140 @@
+{
+	"info": {
+		"_postman_id": "0c2ed09c-1bb1-4cca-b26a-2c75c35b2a31",
+		"name": "Nats Core Sample",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "complex",
+			"item": [
+				{
+					"name": "complex",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{version}}/complex",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{version}}",
+								"complex"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "complexResponse",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{version}}/complex/withResponse",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{version}}",
+								"complex",
+								"withResponse"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "superComplexResponse",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{version}}/complex/withSuperResponse",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{version}}",
+								"complex",
+								"withSuperResponse"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "simple",
+			"item": [
+				{
+					"name": "simple",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "withResponse",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{version}}/simple/withResponse",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{version}}",
+								"simple",
+								"withResponse"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "dynamicSubject",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{version}}/simple/dynamicSubject",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{version}}",
+								"simple",
+								"dynamicSubject"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "emptyPayload",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{version}}/simple/emptyPayload",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{version}}",
+								"simple",
+								"emptyPayload"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

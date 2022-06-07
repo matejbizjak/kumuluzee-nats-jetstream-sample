@@ -1,0 +1,41 @@
+kumuluzee:
+  nats:
+    response-timeout: 5
+    enabled: true
+    jetStream: true
+    servers:
+      - name: default
+        addresses:
+          - nats://localhost:4222
+        streams:
+          - name: stream1
+            subjects:
+              - subject1
+              - subject2
+#            retentionPolicy:
+#            maxConsumers:
+#            maxBytes:
+#            maxAge:
+#            maxMsgSize:
+            storageType: memory
+#            replicas:
+#            noAck:
+#            template:
+#            discardPolicy:
+      - name: secure-unverified-client
+        addresses:
+          - tls://localhost:4223
+          - opentls://localhost:4223
+        tls:
+#          trust-store-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\truststore.jks
+#          trust-store-password: password2
+          certificate-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\server-cert.pem
+      - name: secure
+        addresses:
+          - tls://localhost:4224
+        tls:
+#          trust-store-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\truststore.jks
+#          trust-store-password: password2
+          certificate-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\server-cert.pem
+          key-store-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\keystore.jks
+          key-store-password: password

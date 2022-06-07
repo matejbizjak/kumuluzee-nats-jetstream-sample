@@ -1,0 +1,25 @@
+version: "3"
+services:
+  nats-default:
+    image: nats:latest
+    command: "-c /etc/nats/simple.conf"
+    ports:
+      - "4222:4222"
+    volumes:
+      - ./config/:/etc/nats
+  nats-partly-secure:
+    image: nats:latest
+    command: "-c /etc/nats/tls.conf"
+    ports:
+      - "4223:4223"
+    volumes:
+      - ./config/:/etc/nats
+      - ./certs/:/etc/nats/certs
+  nats-secure:
+    image: nats:latest
+    command: "-c /etc/nats/tlsverify.conf"
+    ports:
+      - "4224:4224"
+    volumes:
+      - ./config/:/etc/nats
+      - ./certs/:/etc/nats/certs
