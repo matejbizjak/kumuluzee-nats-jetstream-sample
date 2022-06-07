@@ -1,8 +1,8 @@
-# KumuluzEE NATS Core sample:
+# KumuluzEE NATS JetStream sample:
 
 ## TODO
 
-Starting NATS servers: `docker-compose -f util/run-nats-server/run-nats-servers.yaml up`
+Starting JetStream enabled NATS servers: `docker-compose -f util/run-nats-server/run-nats-servers.yaml up`
 
 
 ### Securing with TLS:
