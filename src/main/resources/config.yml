@@ -22,6 +22,12 @@ kumuluzee:
 #            noAck:
 #            template:
 #            discardPolicy:
+        jetStreamContexts:
+          - name: context1
+#            domain:
+#            prefix:
+#            publishNoAck:
+#            requestTimeout:
       - name: secure-unverified-client
         addresses:
           - tls://localhost:4223
