@@ -6,6 +6,7 @@ import io.nats.client.JetStream;
 import io.nats.client.JetStreamApiException;
 import io.nats.client.Message;
 import io.nats.client.api.PublishAck;
+import io.nats.client.impl.Headers;
 import io.nats.client.impl.NatsMessage;
 import si.matejbizjak.natsjetstream.sample.api.subscriber.SimpleSubscriber;
 
@@ -18,6 +19,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * @author Matej Bizjak
@@ -40,11 +42,13 @@ public class SimpleResource {
     @Path("/subject1")
     public Response getSub1() {
         try {
-//            Headers headers = new Headers().add("Nats-Msg-Id", "1");  // TODO kako dobiti unique id?
+            String uniqueID = UUID.randomUUID().toString(); // TODO kako dobiti unique id?
+            Headers headers = new Headers().add("Nats-Msg-Id", uniqueID);
+
             Message message = NatsMessage.builder()
                     .subject("subject1")
                     .data(SerDes.serialize("test message"))
-//                    .headers(headers)
+                    .headers(headers)
                     .build();
 
             PublishAck publishAck = jetStream.publish(message);
