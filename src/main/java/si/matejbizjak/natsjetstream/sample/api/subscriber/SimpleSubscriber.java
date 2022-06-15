@@ -1,5 +1,7 @@
 package si.matejbizjak.natsjetstream.sample.api.subscriber;
 
+import com.kumuluz.ee.nats.common.annotations.ConfigurationOverride;
+import com.kumuluz.ee.nats.common.annotations.ConsumerConfig;
 import com.kumuluz.ee.nats.common.util.SerDes;
 import com.kumuluz.ee.nats.jetstream.annotations.JetStreamSubscriber;
 import io.nats.client.JetStreamSubscription;
@@ -19,7 +21,8 @@ import java.util.List;
 public class SimpleSubscriber {
 
     @Inject
-    @JetStreamSubscriber(context = "context1", subject = "subject2", durable = "something")
+    @JetStreamSubscriber(context = "context1", stream = "stream1", subject = "subject2", durable = "somethingNew")
+    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliverPolicy", value = "new")})
     private JetStreamSubscription jetStreamSubscription;
 
     public void pullMsg() {

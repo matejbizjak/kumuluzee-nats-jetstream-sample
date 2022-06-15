@@ -45,3 +45,29 @@ kumuluzee:
           certificate-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\server-cert.pem
           key-store-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\keystore.jks
           key-store-password: password
+    consumerConfiguration:
+      - name: custom1
+        deliverPolicy: all
+#        ackPolicy:
+#        replayPolicy:
+#        description:
+#        durable:
+#        deliverSubject:
+#        deliverGroup:
+#        filterSubject:
+#        sampleFrequency:
+#        startTime:
+#        ackWait:
+#        idleHeartbeat:
+#        maxExpires:
+#        inactiveThreshold:
+#        startSeq:
+#        maxDeliver:
+#        rateLimit:
+#        maxAckPending:
+#        maxPullWaiting:
+#        maxBatch:
+#        maxBytes:
+#        flowControl:
+#        headersOnly:
+#        backoff:
