@@ -26,15 +26,17 @@ public class SimpleSubscriber {
     private JetStreamSubscription jetStreamSubscription;
 
     public void pullMsg() {
-        List<Message> messages = jetStreamSubscription.fetch(3, Duration.ofSeconds(1));
-        for (Message message : messages) {
-            try {
-                System.out.println(message.getSID());
-                System.out.println(message.getHeaders());
-                System.out.println(SerDes.deserialize(message.getData(), String.class));
-                message.ack();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        if (jetStreamSubscription != null) {
+            List<Message> messages = jetStreamSubscription.fetch(3, Duration.ofSeconds(1));
+            for (Message message : messages) {
+                try {
+                    System.out.println(message.getSID());
+                    System.out.println(message.getHeaders());
+                    System.out.println(SerDes.deserialize(message.getData(), String.class));
+                    message.ack();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

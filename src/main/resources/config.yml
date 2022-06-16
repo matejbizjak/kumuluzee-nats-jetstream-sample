@@ -2,7 +2,6 @@ kumuluzee:
   nats:
     response-timeout: 5
     enabled: true
-    jetStream: true
     servers:
       - name: default
         addresses:
@@ -12,6 +11,7 @@ kumuluzee:
             subjects:
               - subject1
               - subject2
+#            description:
 #            retentionPolicy:
 #            maxConsumers:
 #            maxBytes:
@@ -21,7 +21,7 @@ kumuluzee:
             storageType: memory
 #            replicas:
 #            noAck:
-#            template:
+#            templateOwner:
 #            discardPolicy:
 #            duplicateWindow:
         jetStreamContexts:
