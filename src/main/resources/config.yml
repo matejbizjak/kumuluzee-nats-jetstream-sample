@@ -16,12 +16,14 @@ kumuluzee:
 #            maxConsumers:
 #            maxBytes:
 #            maxAge:
+#            maxMsgs:
 #            maxMsgSize:
             storageType: memory
 #            replicas:
 #            noAck:
 #            template:
 #            discardPolicy:
+#            duplicateWindow:
         jetStreamContexts:
           - name: context1
 #            domain:
