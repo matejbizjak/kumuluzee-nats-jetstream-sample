@@ -8,8 +8,8 @@ import io.nats.client.Message;
 import io.nats.client.api.PublishAck;
 import io.nats.client.impl.Headers;
 import io.nats.client.impl.NatsMessage;
+import si.matejbizjak.natsjetstream.sample.api.entity.Demo;
 import si.matejbizjak.natsjetstream.sample.api.subscriber.ComplexSubscriber;
-import si.matejbizjak.natsjetstream.sample.api.subscriber.SimpleSubscriber;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -20,22 +20,25 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author Matej Bizjak
  */
 
-@Path("/simple/")
+@Path("/complex/")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
-public class SimpleResource {
+public class ComplexResource {
 
     @Inject
-    private SimpleSubscriber simpleSubscriber;
+    private ComplexSubscriber complexSubscriber;
     @Inject
-    @JetStreamProducer(context = "context1")
+    @JetStreamProducer(connection = "secure")
     private JetStream jetStream;
 
     @GET
@@ -45,15 +48,18 @@ public class SimpleResource {
             String uniqueID = UUID.randomUUID().toString();
             Headers headers = new Headers().add("Nats-Msg-Id", uniqueID);
 
+            Demo entity = new Demo("john", 12.3, LocalDateTime.now(), 134, new Demo.InnerDemo("smith", 24.345f));
+
             Message message = NatsMessage.builder()
                     .subject("subject1")
-                    .data(SerDes.serialize("test message"))
+                    .data(SerDes.serialize(entity))
                     .headers(headers)
                     .build();
 
-            PublishAck publishAck = jetStream.publish(message);
+            CompletableFuture<PublishAck> future = jetStream.publishAsync(message);
+            PublishAck publishAck = future.get();
             return Response.ok(String.format("Message has been sent to stream %s", publishAck.getStream())).build();
-        } catch (IOException | JetStreamApiException e) {
+        } catch (IOException | ExecutionException | InterruptedException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         }
     }
@@ -62,9 +68,11 @@ public class SimpleResource {
     @Path("/subject2")
     public Response getSimpleSub2() {
         try {
+            LocalDateTime now = LocalDateTime.now();
+
             Message message = NatsMessage.builder()
                     .subject("subject2")
-                    .data(SerDes.serialize("test message to pull manually"))
+                    .data(SerDes.serialize(now))
                     .build();
 
             PublishAck publishAck = jetStream.publish(message);
@@ -77,7 +85,7 @@ public class SimpleResource {
     @GET
     @Path("/pull")
     public Response getPullSimple() {
-        simpleSubscriber.pullMsg();
+        complexSubscriber.pullMsg();
         return Response.ok().build();
     }
 }

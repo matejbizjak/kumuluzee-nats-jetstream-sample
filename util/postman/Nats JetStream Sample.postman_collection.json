@@ -1,64 +1,66 @@
 {
 	"info": {
-		"_postman_id": "0c2ed09c-1bb1-4cca-b26a-2c75c35b2a31",
-		"name": "Nats Core Sample",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"_postman_id": "4051c350-3105-4eb9-a8f9-b0b23feb090e",
+		"name": "Nats JetStream Sample",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8309903"
 	},
 	"item": [
 		{
 			"name": "complex",
 			"item": [
 				{
-					"name": "complex",
+					"name": "subject1",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/{{version}}/complex",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"{{version}}",
-								"complex"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "complexResponse",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/{{version}}/complex/withResponse",
+							"raw": "{{baseUrl}}/{{version}}/complex/subject1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{version}}",
 								"complex",
-								"withResponse"
+								"subject1"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "superComplexResponse",
+					"name": "subject2",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/{{version}}/complex/withSuperResponse",
+							"raw": "{{baseUrl}}/{{version}}/complex/subject2",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{version}}",
 								"complex",
-								"withSuperResponse"
+								"subject2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pull",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{version}}/complex/pull",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{version}}",
+								"complex",
+								"pull"
 							]
 						}
 					},
@@ -70,65 +72,57 @@
 			"name": "simple",
 			"item": [
 				{
-					"name": "simple",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				},
-				{
-					"name": "withResponse",
+					"name": "subject1",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/{{version}}/simple/withResponse",
+							"raw": "{{baseUrl}}/{{version}}/simple/subject1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{version}}",
 								"simple",
-								"withResponse"
+								"subject1"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "dynamicSubject",
+					"name": "subject2",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/{{version}}/simple/dynamicSubject",
+							"raw": "{{baseUrl}}/{{version}}/simple/subject2",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{version}}",
 								"simple",
-								"dynamicSubject"
+								"subject2"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "emptyPayload",
+					"name": "pull",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/{{version}}/simple/emptyPayload",
+							"raw": "{{baseUrl}}/{{version}}/simple/pull",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{version}}",
 								"simple",
-								"emptyPayload"
+								"pull"
 							]
 						}
 					},

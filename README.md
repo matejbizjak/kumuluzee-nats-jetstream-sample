@@ -6,9 +6,7 @@ Starting JetStream enabled NATS servers: `docker-compose -f util/run-nats-server
 
 
 ### Securing with TLS:
-1. Generate self-singed CA, client certificates:
-
-    [Easy way (using mkcert)](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/tls#creating-self-signed-certificates-for-testing):
+1. Generate self-singed CA, client certificates ([easy way - using `mkcert`](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/tls#creating-self-signed-certificates-for-testing)):
     ```
     mkcert -install
     mkcert -cert-file server-cert.pem -key-file server-key.pem localhost ::1
