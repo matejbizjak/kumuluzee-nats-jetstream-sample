@@ -18,6 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <kumuluzee.version>3.12.1</kumuluzee.version>
+        <kumuluzee-nats.version>0.1-SNAPSHOT</kumuluzee-nats.version>
     </properties>
 
     <dependencyManagement>
@@ -40,7 +41,13 @@
         <dependency>
             <groupId>com.kumuluz.ee.nats</groupId>
             <artifactId>kumuluzee-nats-jetstream</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>${kumuluzee-nats.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.kumuluz.ee.nats</groupId>
+            <artifactId>kumuluzee-nats-core</artifactId>
+            <version>${kumuluzee-nats.version}</version>
         </dependency>
     </dependencies>
 

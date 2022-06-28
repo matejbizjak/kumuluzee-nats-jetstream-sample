@@ -23,7 +23,7 @@ import java.util.List;
 public class ComplexSubscriber {
 
     @Inject
-    @JetStreamSubscriber(connection = "secure", subject = "subject2", durable = "onlyNew")
+    @JetStreamSubscriber(connection = "secure", subject = "category.subject2", durable = "newOnly")
     @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliverPolicy", value = "new")})
     private JetStreamSubscription jetStreamSubscription;
 
@@ -34,8 +34,8 @@ public class ComplexSubscriber {
                 try {
                     System.out.println(message.getSID());
                     System.out.println(message.getHeaders());
-                    LocalDateTime entity = SerDes.deserialize(message.getData(), LocalDateTime.class);
-                    System.out.println(entity.toString());
+                    Demo entity = SerDes.deserialize(message.getData(), Demo.class);
+                    System.out.println(entity.getName());
                     message.ack();
                 } catch (IOException e) {
                     throw new RuntimeException(e);

@@ -21,6 +21,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author Matej Bizjak
@@ -67,9 +69,9 @@ public class SimpleResource {
                     .data(SerDes.serialize("test message to pull manually"))
                     .build();
 
-            PublishAck publishAck = jetStream.publish(message);
-            return Response.ok(String.format("Message has been sent to stream %s", publishAck.getStream())).build();
-        } catch (IOException | JetStreamApiException e) {
+            CompletableFuture<PublishAck> futureAck = jetStream.publishAsync(message);
+            return Response.ok(String.format("Message has been sent to stream %s", futureAck.get().getStream())).build();
+        } catch (IOException | ExecutionException | InterruptedException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         }
     }

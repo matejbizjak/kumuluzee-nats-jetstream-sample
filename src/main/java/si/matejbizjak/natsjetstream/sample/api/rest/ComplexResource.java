@@ -51,7 +51,7 @@ public class ComplexResource {
             Demo entity = new Demo("john", 12.3, LocalDateTime.now(), 134, new Demo.InnerDemo("smith", 24.345f));
 
             Message message = NatsMessage.builder()
-                    .subject("subject1")
+                    .subject("category.subject1")
                     .data(SerDes.serialize(entity))
                     .headers(headers)
                     .build();
@@ -68,11 +68,11 @@ public class ComplexResource {
     @Path("/subject2")
     public Response getSimpleSub2() {
         try {
-            LocalDateTime now = LocalDateTime.now();
+            Demo entity = new Demo("michael", 12.3, LocalDateTime.now(), 134, new Demo.InnerDemo("brown", 24.345f));
 
             Message message = NatsMessage.builder()
-                    .subject("subject2")
-                    .data(SerDes.serialize(now))
+                    .subject("category.subject2")
+                    .data(SerDes.serialize(entity))
                     .build();
 
             PublishAck publishAck = jetStream.publish(message);

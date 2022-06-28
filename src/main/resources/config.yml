@@ -1,7 +1,7 @@
 kumuluzee:
   nats:
     response-timeout: 5
-    enabled: true
+    jetStream: true
     servers:
       - name: default
         addresses:
@@ -50,8 +50,7 @@ kumuluzee:
         streams:
           - name: stream2
             subjects:
-              - subject1
-              - subject2
+              - category.*
 #            description:
 #            retentionPolicy:
 #            maxConsumers:
