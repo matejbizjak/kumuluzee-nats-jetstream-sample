@@ -278,9 +278,6 @@ Now we can use the injected JetStream reference to publish new messages using fu
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
 public class SimpleResource {
-
-    @Inject
-    private SimpleSubscriber simpleSubscriber;
     
     @Inject
     @JetStreamProducer(context = "context1")
@@ -321,13 +318,6 @@ public class SimpleResource {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         }
     }
-
-    @GET
-    @Path("/pull")
-    public Response getPullSimple() {
-        simpleSubscriber.pullMsg();
-        return Response.ok().build();
-    }
 }
 ```
 
@@ -335,9 +325,40 @@ public class SimpleResource {
 
 ##### Pull consumer
 
-To consume messages, create a class and annotate it with `@NatsListener`. Specify the name of the connection the consumer will use.
+To consume messages by pulling them from the server we need to create a JetStreamSubscription for each subject.
+With KumuluzEE NATS JetStream we can use a `@JetStreamSubscriber` annotation to inject a JetStreamSubscription reference.
 
-Then create consumer methods by annotating them with `@Subject` and specify the subject name. If you add more consumers to the same group, only one of them will get the message.
+Let's create a service SimpleSubscriber as shown in the example below. Specify the connection details, the subject and durable name.
+Let's override the consumer configuration `custom1` by changing its deliverPolicy to `new`. Now we will only receive the messages that were published after this subscription started. 
+
+With the injected JetStreamSubscription use can now use functions like `fetch()`, `pull()`, `iterate()` etc. to receive new messages.
+
+```java
+@ApplicationScoped
+public class SimpleSubscriber {
+
+    @Inject
+    @JetStreamSubscriber(context = "context1", stream = "stream1", subject = "subject2", durable = "somethingNew")
+    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliverPolicy", value = "new")})
+    private JetStreamSubscription jetStreamSubscription;
+
+    public void pullMsg() {
+        if (jetStreamSubscription != null) {
+            List<Message> messages = jetStreamSubscription.fetch(3, Duration.ofSeconds(1));
+            for (Message message : messages) {
+                try {
+                    System.out.println(SerDes.deserialize(message.getData(), String.class));
+                    message.ack();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+}
+```
+
+Inject the previously created service to the SimpleResource and create a new REST endpoint for manually pulling new messages from the server.
 
 ```java
 @Path("/simple/")
@@ -362,9 +383,25 @@ public class SimpleResource {
 
 ##### Push consumer
 
+For push based consumers we can annotate the methods with `@JetStreamListener` and the server will automatically push new messages to the consumers.
+
+Create a new class `SimpleListener`, add a method and annotate it as shown in the example below.
+The method will receive a message through the first method parameter. Make sure to match the type to the producer. 
+
+```java
+public class SimpleListener {
+
+    @JetStreamListener(context = "context1", subject = "subject1")
+    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliverPolicy", value = "new")})
+    public void receive(String value) {
+        System.out.println(value);
+    }
+}
+```
+
 ---
 
-You can continue developing another REST endpoint for producer and consumer: ComplexClient, ComplexResource and ComplexListener.
+You can continue developing another REST endpoint and listener for producing and consuming streams: ComplexResource, ComplexListener, ComplexSubscriber. 
 The main difference is that the type of the messages is not String anymore, but a more complex class `Demo`.
 The extension automatically de/serializes the data, just make sure to include the default constructor
 ```java
@@ -373,7 +410,7 @@ public Demo() {
 ```
 in your class. And that the consumer's message type matches the producer's.
 
-The complex variant is also using a different NATS connection that is secured with TLS.
+The complex variant is also using [wildcards](https://docs.nats.io/nats-concepts/subjects) for subjects and a different NATS connection that is secured with the TLS.
 In the next section we learn how to configure the connections and how to use the TLS.
 
 ### Configuration
@@ -382,23 +419,55 @@ Let's configure 2 NATS connections we need for this application:
 * default: unsecured connection on the default address
 * secure: secured connection by Mutual TLS on localhost:4224
 
-```xml
+For each connection we also need to specify the streams (unless we want to do this manualy using NATS CLI or similar) that will be generated at the startup. 
+We can also specify custom consumer configurations and jetStream context settings.  
+
+```yaml
 kumuluzee:
   nats:
     response-timeout: 5
+    jetStream: true
     servers:
       - name: default
         addresses:
           - nats://localhost:4222
+        streams:
+          - name: stream1
+            subjects:
+              - subject1
+              - subject2
+            storageType: memory
+        jetStreamContexts:
+          - name: context1
+#            domain:
+#            prefix:
+#            publishNoAck:
+#            requestTimeout:
+      - name: secure-unverified-client
+        addresses:
+          - tls://localhost:4223
+          - opentls://localhost:4223
+        tls:
+#          trust-store-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\truststore.jks
+#          trust-store-password: password2
+          certificate-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\server-cert.pem
       - name: secure
         addresses:
           - tls://localhost:4224
         tls:
-#          trust-store-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-jetstream-sample\src\main\resources\certs\truststore.jks
+#          trust-store-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\truststore.jks
 #          trust-store-password: password2
-          certificate-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-jetstream-sample\src\main\resources\certs\server-cert.pem
-          key-store-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-jetstream-sample\src\main\resources\certs\keystore.jks
+          certificate-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\server-cert.pem
+          key-store-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\keystore.jks
           key-store-password: password
+        streams:
+          - name: stream2
+            subjects:
+              - category.*
+            storageType: memory
+    consumerConfiguration:
+      - name: custom1
+        deliverPolicy: all
 ```
 
 See the next section to learn how to set up the TLS.
@@ -443,7 +512,7 @@ See the next section to learn how to set up the TLS.
 #### Examples
 
 ##### Default server connection with a custom response timeout
-```xml
+```yaml
 kumuluzee:
   nats:
     response-timeout: 5
@@ -451,7 +520,7 @@ kumuluzee:
 
 ##### TLS with a single address
 
-```xml
+```yaml
 kumuluzee:
   nats:
     response-timeout: 5
@@ -469,7 +538,7 @@ You can either specify the trust store and password, or the server's certificate
 
 ##### Mutual TLS with a single address
 
-```xml
+```yaml
 kumuluzee:
   nats:
     servers:
