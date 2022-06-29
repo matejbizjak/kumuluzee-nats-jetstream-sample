@@ -1,4 +1,4 @@
-# KumuluzEE NATS JetStream sample:
+# KumuluzEE NATS JetStream sample
 
 > Develop REST services that produces and consumes messages using the NATS JetStream connective technology
 
