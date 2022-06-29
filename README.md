@@ -162,7 +162,7 @@ which should be in a file named `log4j2.xml` and located in `src/main/resources`
     </Loggers>
 </Configuration>
 ```
-If you would like to collect Kafka related logs through the KumuluzEE Logs, you have to include the following `slf4j` implementation as dependency:
+If you would like to collect NATS related logs through the KumuluzEE Logs, you have to include the following `slf4j` implementation as dependency:
 ```xml
 <dependency>
     <groupId>org.apache.logging.log4j</groupId>
