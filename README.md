@@ -386,7 +386,7 @@ public class SimpleResource {
 For push based consumers we can annotate the methods with `@JetStreamListener` and the server will automatically push new messages to the consumers.
 
 Create a new class `SimpleListener`, add a method and annotate it as shown in the example below.
-The method will receive a message through the first method parameter. Make sure to match the type to the producer. 
+The method will receive a message through the first method parameter. Make sure to match the type of the producer. 
 
 ```java
 public class SimpleListener {
