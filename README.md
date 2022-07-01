@@ -339,7 +339,7 @@ public class SimpleSubscriber {
 
     @Inject
     @JetStreamSubscriber(context = "context1", stream = "stream1", subject = "subject2", durable = "somethingNew")
-    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliverPolicy", value = "new")})
+    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
     private JetStreamSubscription jetStreamSubscription;
 
     public void pullMsg() {
@@ -392,7 +392,7 @@ The method will receive a message through the first method parameter. Make sure 
 public class SimpleListener {
 
     @JetStreamListener(context = "context1", subject = "subject1")
-    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliverPolicy", value = "new")})
+    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
     public void receive(String value) {
         System.out.println(value);
     }
@@ -425,8 +425,8 @@ We can also specify custom consumer configurations and jetStream context setting
 ```yaml
 kumuluzee:
   nats:
-    response-timeout: 5
-    jetStream: true
+    response-timeout: 5S
+    jetstream: true
     servers:
       - name: default
         addresses:
@@ -437,12 +437,12 @@ kumuluzee:
               - subject1
               - subject2
             storageType: memory
-        jetStreamContexts:
+        jetstream-contexts:
           - name: context1
 #            domain:
 #            prefix:
-#            publishNoAck:
-#            requestTimeout:
+#            publish-no-ack:
+#            request-timeout:
       - name: secure-unverified-client
         addresses:
           - tls://localhost:4223
@@ -464,10 +464,10 @@ kumuluzee:
           - name: stream2
             subjects:
               - category.*
-            storageType: memory
-    consumerConfiguration:
+            storage-type: memory
+    consumer-configuration:
       - name: custom1
-        deliverPolicy: all
+        deliver-policy: all
 ```
 
 See the next section to learn how to set up the TLS.
@@ -515,7 +515,7 @@ See the next section to learn how to set up the TLS.
 ```yaml
 kumuluzee:
   nats:
-    response-timeout: 5
+    response-timeout: 5S
 ```
 
 ##### TLS with a single address
@@ -523,7 +523,7 @@ kumuluzee:
 ```yaml
 kumuluzee:
   nats:
-    response-timeout: 5
+    response-timeout: 5S
     servers:
       - name: secure-unverified-client
         addresses:

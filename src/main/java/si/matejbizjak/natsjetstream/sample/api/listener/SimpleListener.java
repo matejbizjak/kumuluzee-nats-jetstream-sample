@@ -12,7 +12,7 @@ import com.kumuluz.ee.nats.jetstream.annotations.JetStreamListener;
 public class SimpleListener {
 
     @JetStreamListener(context = "context1", subject = "subject1")
-    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliverPolicy", value = "new")})
+    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
     public void receive(String value) {
         System.out.println(value);
     }

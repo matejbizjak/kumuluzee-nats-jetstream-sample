@@ -24,7 +24,7 @@ public class ComplexSubscriber {
 
     @Inject
     @JetStreamSubscriber(connection = "secure", subject = "category.subject2", durable = "newOnly")
-    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliverPolicy", value = "new")})
+    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
     private JetStreamSubscription jetStreamSubscription;
 
     public void pullMsg() {

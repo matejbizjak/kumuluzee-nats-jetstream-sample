@@ -1,7 +1,7 @@
 kumuluzee:
   nats:
-    response-timeout: 5
-    jetStream: true
+    jetstream: true
+    ack-confirmation-timeout: 5S
     servers:
       - name: default
         addresses:
@@ -12,24 +12,24 @@ kumuluzee:
               - subject1
               - subject2
 #            description:
-#            retentionPolicy:
-#            maxConsumers:
-#            maxBytes:
-#            maxAge:
-#            maxMsgs:
-#            maxMsgSize:
-            storageType: memory
+#            retention-policy:
+#            max-consumers:
+#            max-bytes:
+#            max-age:
+#            max-msgs:
+#            max-msg-size:
+            storage-type: memory
 #            replicas:
-#            noAck:
-#            templateOwner:
-#            discardPolicy:
-#            duplicateWindow:
-        jetStreamContexts:
+#            no-ack:
+#            template-owner:
+#            discard-policy:
+#            duplicate-window:
+        jetstream-contexts:
           - name: context1
 #            domain:
 #            prefix:
-#            publishNoAck:
-#            requestTimeout:
+#            publish-no-ack:
+#            request-timeout:
       - name: secure-unverified-client
         addresses:
           - tls://localhost:4223
@@ -52,41 +52,41 @@ kumuluzee:
             subjects:
               - category.*
 #            description:
-#            retentionPolicy:
-#            maxConsumers:
-#            maxBytes:
-#            maxAge:
-#            maxMsgs:
-#            maxMsgSize:
-            storageType: memory
+#            retention-policy:
+#            max-consumers:
+#            max-bytes:
+#            max-age:
+#            max-msgs:
+#            max-msg-size:
+            storage-type: memory
 #            replicas:
-#            noAck:
-#            templateOwner:
-#            discardPolicy:
-#            duplicateWindow:
-    consumerConfiguration:
+#            no-ack:
+#            template-owner:
+#            discard-policy:
+#            duplicate-window:
+    consumer-configuration:
       - name: custom1
-        deliverPolicy: all
-#        ackPolicy:
-#        replayPolicy:
+        deliver-policy: all
+#        ack-policy:
+#        replay-policy:
 #        description:
 #        durable:
-#        deliverSubject:
-#        deliverGroup:
-#        filterSubject:
-#        sampleFrequency:
-#        startTime:
-#        ackWait:
-#        idleHeartbeat:
-#        maxExpires:
-#        inactiveThreshold:
-#        startSeq:
-#        maxDeliver:
-#        rateLimit:
-#        maxAckPending:
-#        maxPullWaiting:
-#        maxBatch:
-#        maxBytes:
-#        flowControl:
-#        headersOnly:
+#        deliver-subject:
+#        deliver-group:
+#        filter-subject:
+#        sample-frequency:
+#        start-time:
+#        ack-wait:
+#        idle-heartbeat:
+#        max-expires:
+#        inactive-threshold:
+#        start-seq:
+#        max-deliver:
+#        rate-limit:
+#        max-ack-pending:
+#        max-pull-waiting:
+#        max-batch:
+#        max-bytes:
+#        flow-control:
+#        headers-only:
 #        backoff:

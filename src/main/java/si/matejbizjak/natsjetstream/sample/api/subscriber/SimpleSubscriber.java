@@ -22,7 +22,7 @@ public class SimpleSubscriber {
 
     @Inject
     @JetStreamSubscriber(context = "context1", stream = "stream1", subject = "subject2", durable = "somethingNew")
-    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliverPolicy", value = "new")})
+    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
     private JetStreamSubscription jetStreamSubscription;
 
     public void pullMsg() {

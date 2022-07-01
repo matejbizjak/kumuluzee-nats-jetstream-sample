@@ -10,7 +10,7 @@ import si.matejbizjak.natsjetstream.sample.api.entity.Demo;
 public class ComplexListener {
 
     @JetStreamListener(connection = "secure", subject = "category.*")
-//    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliverPolicy", value = "new")})
+//    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
     public void receive(Demo entity) {
         System.out.println(entity.getName());
     }
