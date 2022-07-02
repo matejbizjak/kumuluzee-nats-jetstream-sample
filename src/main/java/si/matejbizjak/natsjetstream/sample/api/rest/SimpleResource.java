@@ -20,6 +20,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -43,6 +44,9 @@ public class SimpleResource {
     @GET
     @Path("/subject1")
     public Response getSimpleSub1() {
+        if (jetStream == null) {
+            return Response.serverError().build();
+        }
         try {
             String uniqueID = UUID.randomUUID().toString();
             Headers headers = new Headers().add("Nats-Msg-Id", uniqueID);
@@ -63,6 +67,9 @@ public class SimpleResource {
     @GET
     @Path("/subject2")
     public Response getSimpleSub2() {
+        if (jetStream == null) {
+            return Response.serverError().build();
+        }
         try {
             Message message = NatsMessage.builder()
                     .subject("subject2")

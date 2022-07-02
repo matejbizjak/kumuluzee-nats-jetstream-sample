@@ -44,6 +44,9 @@ public class ComplexResource {
     @GET
     @Path("/subject1")
     public Response getSimpleSub1() {
+        if (jetStream == null) {
+            return Response.serverError().build();
+        }
         try {
             String uniqueID = UUID.randomUUID().toString();
             Headers headers = new Headers().add("Nats-Msg-Id", uniqueID);
@@ -67,6 +70,9 @@ public class ComplexResource {
     @GET
     @Path("/subject2")
     public Response getSimpleSub2() {
+        if (jetStream == null) {
+            return Response.serverError().build();
+        }
         try {
             Demo entity = new Demo("michael", 12.3, LocalDateTime.now(), 134, new Demo.InnerDemo("brown", 24.345f));
 

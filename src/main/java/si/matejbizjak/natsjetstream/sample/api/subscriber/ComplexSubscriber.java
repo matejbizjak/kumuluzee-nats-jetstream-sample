@@ -12,7 +12,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
