@@ -1,7 +1,7 @@
 kumuluzee:
   nats:
     jetstream: true
-    ack-confirmation-timeout: 5S
+    ack-confirmation-timeout: 5s
     servers:
       - name: default
         addresses:
@@ -16,7 +16,7 @@ kumuluzee:
 #            max-consumers:
 #            max-bytes:
 #            max-age:
-#            max-msgs:
+#            max-msgs: 100
 #            max-msg-size:
             storage-type: memory
 #            replicas:
