@@ -1,7 +1,7 @@
 kumuluzee:
   nats:
     jetstream: true
-    ack-confirmation-timeout: 5s
+    ack-confirmation-timeout: PT5S
     servers:
       - name: default
         addresses:

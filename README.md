@@ -431,7 +431,7 @@ We can also specify custom consumer configurations and jetStream context setting
 ```yaml
 kumuluzee:
   nats:
-    response-timeout: 5s
+    response-timeout: PT5S
     jetstream: true
     servers:
       - name: default
@@ -521,7 +521,7 @@ See the next section to learn how to set up the TLS.
 ```yaml
 kumuluzee:
   nats:
-    response-timeout: 5s
+    response-timeout: PT5S
 ```
 
 ##### TLS with a single address
@@ -529,7 +529,7 @@ kumuluzee:
 ```yaml
 kumuluzee:
   nats:
-    response-timeout: 5s
+    response-timeout: PT5S
     servers:
       - name: secure-unverified-client
         addresses:
