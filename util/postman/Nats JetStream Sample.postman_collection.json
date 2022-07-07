@@ -7,60 +7,60 @@
 	},
 	"item": [
 		{
-			"name": "complex",
+			"name": "product",
 			"item": [
 				{
-					"name": "subject1",
+					"name": "postCorn",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/{{version}}/complex/subject1",
+							"raw": "{{baseUrl}}/{{version}}/product/corn",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{version}}",
-								"complex",
-								"subject1"
+								"product",
+								"corn"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "subject2",
+					"name": "postAnanas",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/{{version}}/complex/subject2",
+							"raw": "{{baseUrl}}/{{version}}/product/ananas",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{version}}",
-								"complex",
-								"subject2"
+								"product",
+								"ananas"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "pull",
+					"name": "pullCorn",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/{{version}}/complex/pull",
+							"raw": "{{baseUrl}}/{{version}}/product/pullCorn",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{version}}",
-								"complex",
-								"pull"
+								"product",
+								"pullCorn"
 							]
 						}
 					},
@@ -69,21 +69,21 @@
 			]
 		},
 		{
-			"name": "simple",
+			"name": "text",
 			"item": [
 				{
-					"name": "subject1",
+					"name": "postSub1",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/{{version}}/simple/subject1",
+							"raw": "{{baseUrl}}/{{version}}/text/subject1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{version}}",
-								"simple",
+								"text",
 								"subject1"
 							]
 						}
@@ -91,18 +91,18 @@
 					"response": []
 				},
 				{
-					"name": "subject2",
+					"name": "postSub2",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/{{version}}/simple/subject2",
+							"raw": "{{baseUrl}}/{{version}}/text/subject2",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{version}}",
-								"simple",
+								"text",
 								"subject2"
 							]
 						}
@@ -110,18 +110,18 @@
 					"response": []
 				},
 				{
-					"name": "pull",
+					"name": "pullText",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/{{version}}/simple/pull",
+							"raw": "{{baseUrl}}/{{version}}/text/pull",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{version}}",
-								"simple",
+								"text",
 								"pull"
 							]
 						}

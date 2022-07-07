@@ -8,19 +8,14 @@ import io.nats.client.Message;
 import io.nats.client.api.PublishAck;
 import io.nats.client.impl.Headers;
 import io.nats.client.impl.NatsMessage;
-import si.matejbizjak.natsjetstream.sample.api.subscriber.ComplexSubscriber;
-import si.matejbizjak.natsjetstream.sample.api.subscriber.SimpleSubscriber;
+import si.matejbizjak.natsjetstream.sample.api.subscriber.TextSubscriber;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -29,21 +24,22 @@ import java.util.concurrent.ExecutionException;
  * @author Matej Bizjak
  */
 
-@Path("/simple/")
+@Path("/text/")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
-public class SimpleResource {
+public class TextResource {
 
     @Inject
-    private SimpleSubscriber simpleSubscriber;
+    private TextSubscriber textSubscriber;
+
     @Inject
     @JetStreamProducer(context = "context1")
     private JetStream jetStream;
 
-    @GET
+    @POST
     @Path("/subject1")
-    public Response getSimpleSub1() {
+    public Response postSub1() {
         if (jetStream == null) {
             return Response.serverError().build();
         }
@@ -53,31 +49,33 @@ public class SimpleResource {
 
             Message message = NatsMessage.builder()
                     .subject("subject1")
-                    .data(SerDes.serialize("test message"))
+                    .data(SerDes.serialize("simple message"))
                     .headers(headers)
                     .build();
 
             PublishAck publishAck = jetStream.publish(message);
-            return Response.ok(String.format("Message has been sent to stream %s", publishAck.getStream())).build();
+            return Response.ok(String.format("Message has been sent to subject %s in stream %s", message.getSubject()
+                    , publishAck.getStream())).build();
         } catch (IOException | JetStreamApiException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         }
     }
 
-    @GET
+    @POST
     @Path("/subject2")
-    public Response getSimpleSub2() {
+    public Response postSub2() {
         if (jetStream == null) {
             return Response.serverError().build();
         }
         try {
             Message message = NatsMessage.builder()
                     .subject("subject2")
-                    .data(SerDes.serialize("test message to pull manually"))
+                    .data(SerDes.serialize("simple message to be pulled manually"))
                     .build();
 
             CompletableFuture<PublishAck> futureAck = jetStream.publishAsync(message);
-            return Response.ok(String.format("Message has been sent to stream %s", futureAck.get().getStream())).build();
+            return Response.ok(String.format("Message has been sent to subject %s in stream %s", message.getSubject()
+                    , futureAck.get().getStream())).build();
         } catch (IOException | ExecutionException | InterruptedException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         }
@@ -85,8 +83,8 @@ public class SimpleResource {
 
     @GET
     @Path("/pull")
-    public Response getPullSimple() {
-        simpleSubscriber.pullMsg();
+    public Response pullText() {
+        textSubscriber.pullMsg();
         return Response.ok().build();
     }
 }

@@ -6,7 +6,6 @@ import com.kumuluz.ee.nats.common.util.SerDes;
 import com.kumuluz.ee.nats.jetstream.annotations.JetStreamSubscriber;
 import io.nats.client.JetStreamSubscription;
 import io.nats.client.Message;
-import si.matejbizjak.natsjetstream.sample.api.entity.Demo;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -19,10 +18,10 @@ import java.util.List;
  */
 
 @ApplicationScoped
-public class ComplexSubscriber {
+public class TextSubscriber {
 
     @Inject
-    @JetStreamSubscriber(connection = "secure", subject = "category.subject2", durable = "newOnly")
+    @JetStreamSubscriber(context = "context1", stream = "stream1", subject = "subject2", durable = "somethingNew")
     @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
     private JetStreamSubscription jetStreamSubscription;
 
@@ -31,12 +30,10 @@ public class ComplexSubscriber {
             List<Message> messages = jetStreamSubscription.fetch(3, Duration.ofSeconds(1));
             for (Message message : messages) {
                 try {
-                    System.out.println(message.getSID());
-                    System.out.println(message.getHeaders());
-                    Demo entity = SerDes.deserialize(message.getData(), Demo.class);
-                    System.out.println(entity.getName());
+                    System.out.println(SerDes.deserialize(message.getData(), String.class));
                     message.ack();
                 } catch (IOException e) {
+                    message.nak();
                     throw new RuntimeException(e);
                 }
             }

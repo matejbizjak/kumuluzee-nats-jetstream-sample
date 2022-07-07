@@ -50,7 +50,7 @@ kumuluzee:
         streams:
           - name: stream2
             subjects:
-              - category.*
+              - product.*
 #            description:
 #            retention-policy:
 #            max-consumers:

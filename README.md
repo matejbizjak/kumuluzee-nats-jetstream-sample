@@ -171,6 +171,14 @@ If you would like to collect NATS related logs through the KumuluzEE Logs, you h
 </dependency>
 ```
 
+Add the `jackson-datatype-jsr310` dependency for our custom ObjectMapper provider, so it can work with Java 8 Date & Time API.
+
+```xml
+<dependency>
+    <groupId>com.fasterxml.jackson.datatype</groupId>
+    <artifactId>jackson-datatype-jsr310</artifactId>
+</dependency>
+
 Add the `kumuluzee-maven-plugin` build plugin to package microservice as uber-jar:
 
 ```xml
@@ -226,6 +234,23 @@ public class ProducerApplication extends Application {
 }
 ```
 
+#### Custom ObjectMapper
+
+First create a custom ObjectMapper for de/serialization by implementing `NatsObjectMapperProvider`.
+Here we register JavaTimeModule() which enables the usage of Java 8 Date & Time API.
+
+```java
+public class NatsMapperProvider implements NatsObjectMapperProvider {
+
+    @Override
+    public ObjectMapper provideObjectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        return objectMapper;
+    }
+}
+```
+
 #### Producer
 
 [//]: # (Create the interface SimpleClient, annotate it with `@RegisterRestClient` and specify the name of the NATS connection that the client will use.)
@@ -267,25 +292,25 @@ public class ProducerApplication extends Application {
 
 [//]: # (```)
 
-Implement the first JAX-RS resource `SimpleResource` with GET methods that initiate producing of the messages.
+Implement the first JAX-RS resource `TextResource` with POST methods that initiate producing of the messages.
 Inject the JetStream context using `@Inject` and `@JetStreamProducer` and specify the context name that we will later configure in the configurations. Let's leave the default connection for now.
 
 Now we can use the injected JetStream reference to publish new messages using functions `publish()` and `publishAck()`. 
 
 ```java
-@Path("/simple/")
+@Path("/text/")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
-public class SimpleResource {
+public class TextResource {
     
     @Inject
     @JetStreamProducer(context = "context1")
     private JetStream jetStream;
 
-    @GET
+    @POST
     @Path("/subject1")
-    public Response getSimpleSub1() {
+    public Response postSub1() {
         if (jetStream == null) {
             return Response.serverError().build();
         }
@@ -295,31 +320,33 @@ public class SimpleResource {
 
             Message message = NatsMessage.builder()
                     .subject("subject1")
-                    .data(SerDes.serialize("test message"))
+                    .data(SerDes.serialize("simple message"))
                     .headers(headers)
                     .build();
 
             PublishAck publishAck = jetStream.publish(message);
-            return Response.ok(String.format("Message has been sent to stream %s", publishAck.getStream())).build();
+            return Response.ok(String.format("Message has been sent to subject %s in stream %s", message.getSubject()
+                    , publishAck.getStream())).build();
         } catch (IOException | JetStreamApiException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         }
     }
 
-    @GET
+    @POST
     @Path("/subject2")
-    public Response getSimpleSub2() {
+    public Response postSub2() {
         if (jetStream == null) {
             return Response.serverError().build();
         }
         try {
             Message message = NatsMessage.builder()
                     .subject("subject2")
-                    .data(SerDes.serialize("test message to pull manually"))
+                    .data(SerDes.serialize("simple message to be pulled manually"))
                     .build();
 
             CompletableFuture<PublishAck> futureAck = jetStream.publishAsync(message);
-            return Response.ok(String.format("Message has been sent to stream %s", futureAck.get().getStream())).build();
+            return Response.ok(String.format("Message has been sent to subject %s in stream %s", message.getSubject()
+                    , futureAck.get().getStream())).build();
         } catch (IOException | ExecutionException | InterruptedException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         }
@@ -334,14 +361,14 @@ public class SimpleResource {
 To consume messages by pulling them from the server we need to create a JetStreamSubscription for each subject.
 With KumuluzEE NATS JetStream we can use a `@JetStreamSubscriber` annotation to inject a JetStreamSubscription reference.
 
-Let's create a service SimpleSubscriber as shown in the example below. Specify the connection details, the subject and durable name.
+Let's create a service TextSubscriber as shown in the example below. Specify the connection details, the subject and durable name.
 Let's override the consumer configuration `custom1` by changing its deliverPolicy to `new`. Now we will only receive the messages that were published after this subscription started. 
 
 With the injected JetStreamSubscription use can now use functions like `fetch()`, `pull()`, `iterate()` etc. to receive new messages.
 
 ```java
 @ApplicationScoped
-public class SimpleSubscriber {
+public class TextSubscriber {
 
     @Inject
     @JetStreamSubscriber(context = "context1", stream = "stream1", subject = "subject2", durable = "somethingNew")
@@ -356,6 +383,7 @@ public class SimpleSubscriber {
                     System.out.println(SerDes.deserialize(message.getData(), String.class));
                     message.ack();
                 } catch (IOException e) {
+                    message.nak();
                     throw new RuntimeException(e);
                 }
             }
@@ -364,7 +392,7 @@ public class SimpleSubscriber {
 }
 ```
 
-Inject the previously created service to the SimpleResource and create a new REST endpoint for manually pulling new messages from the server.
+Inject the previously created service to the TextResource and create a new REST endpoint for manually pulling new messages from the server.
 
 ```java
 @Path("/simple/")
@@ -374,14 +402,14 @@ Inject the previously created service to the SimpleResource and create a new RES
 public class SimpleResource {
 
     @Inject
-    private SimpleSubscriber simpleSubscriber;
+    private TextSubscriber textSubscriber;
 
     ...
-    
+
     @GET
     @Path("/pull")
-    public Response getPullSimple() {
-        simpleSubscriber.pullMsg();
+    public Response pullText() {
+        textSubscriber.pullMsg();
         return Response.ok().build();
     }
 }
@@ -391,11 +419,11 @@ public class SimpleResource {
 
 For push based consumers we can annotate the methods with `@JetStreamListener` and the server will automatically push new messages to the consumers.
 
-Create a new class `SimpleListener`, add a method and annotate it as shown in the example below.
+Create a new class `TextListener`, add a method and annotate it as shown in the example below.
 The method will receive a message through the first method parameter. Make sure to match the type of the producer. 
 
 ```java
-public class SimpleListener {
+public class TextListener {
 
     @JetStreamListener(context = "context1", subject = "subject1")
     @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
@@ -407,7 +435,7 @@ public class SimpleListener {
 
 ---
 
-You can continue developing another REST endpoint and listener for producing and consuming streams: ComplexResource, ComplexListener, ComplexSubscriber. 
+You can continue developing another REST endpoint and listener for producing and consuming streams: ProductResource, ProductListener, ProductSubscriber. 
 The main difference is that the type of the messages is not String anymore, but a more complex class `Demo`.
 The extension automatically de/serializes the data, just make sure to include the default constructor
 ```java

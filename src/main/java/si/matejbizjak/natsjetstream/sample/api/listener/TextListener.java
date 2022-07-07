@@ -9,7 +9,7 @@ import com.kumuluz.ee.nats.jetstream.annotations.JetStreamListener;
  * @author Matej Bizjak
  */
 
-public class SimpleListener {
+public class TextListener {
 
     @JetStreamListener(context = "context1", subject = "subject1")
     @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})

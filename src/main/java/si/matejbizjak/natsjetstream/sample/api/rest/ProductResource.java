@@ -8,15 +8,12 @@ import io.nats.client.Message;
 import io.nats.client.api.PublishAck;
 import io.nats.client.impl.Headers;
 import io.nats.client.impl.NatsMessage;
-import si.matejbizjak.natsjetstream.sample.api.entity.Demo;
-import si.matejbizjak.natsjetstream.sample.api.subscriber.ComplexSubscriber;
+import si.matejbizjak.natsjetstream.sample.api.entity.Product;
+import si.matejbizjak.natsjetstream.sample.api.subscriber.ProductSubscriber;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -29,21 +26,21 @@ import java.util.concurrent.ExecutionException;
  * @author Matej Bizjak
  */
 
-@Path("/complex/")
+@Path("/product/")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 @RequestScoped
-public class ComplexResource {
+public class ProductResource {
 
     @Inject
-    private ComplexSubscriber complexSubscriber;
+    private ProductSubscriber productSubscriber;
     @Inject
     @JetStreamProducer(connection = "secure")
     private JetStream jetStream;
 
-    @GET
-    @Path("/subject1")
-    public Response getSimpleSub1() {
+    @POST
+    @Path("/corn")
+    public Response postCorn() {
         if (jetStream == null) {
             return Response.serverError().build();
         }
@@ -51,11 +48,11 @@ public class ComplexResource {
             String uniqueID = UUID.randomUUID().toString();
             Headers headers = new Headers().add("Nats-Msg-Id", uniqueID);
 
-            Demo entity = new Demo("john", 12.3, LocalDateTime.now(), 134, new Demo.InnerDemo("smith", 24.345f));
+            Product corn = new Product(1, "Corn", "Corn for popcorn - 1 kg", 3.2f, 12, null, LocalDateTime.now());
 
             Message message = NatsMessage.builder()
-                    .subject("category.subject1")
-                    .data(SerDes.serialize(entity))
+                    .subject("product.corn")
+                    .data(SerDes.serialize(corn))
                     .headers(headers)
                     .build();
 
@@ -67,18 +64,18 @@ public class ComplexResource {
         }
     }
 
-    @GET
-    @Path("/subject2")
-    public Response getSimpleSub2() {
+    @POST
+    @Path("/ananas")
+    public Response postAnanas() {
         if (jetStream == null) {
             return Response.serverError().build();
         }
         try {
-            Demo entity = new Demo("michael", 12.3, LocalDateTime.now(), 134, new Demo.InnerDemo("brown", 24.345f));
+            Product ananas = new Product(2, "Ananas", "Ananas from Costa Rica", 1.73f, 8, null, LocalDateTime.now());
 
             Message message = NatsMessage.builder()
-                    .subject("category.subject2")
-                    .data(SerDes.serialize(entity))
+                    .subject("product.ananas")
+                    .data(SerDes.serialize(ananas))
                     .build();
 
             PublishAck publishAck = jetStream.publish(message);
@@ -89,9 +86,9 @@ public class ComplexResource {
     }
 
     @GET
-    @Path("/pull")
-    public Response getPullSimple() {
-        complexSubscriber.pullMsg();
+    @Path("/pullCorn")
+    public Response pullCorn() {
+        productSubscriber.pullCorn();
         return Response.ok().build();
     }
 }
