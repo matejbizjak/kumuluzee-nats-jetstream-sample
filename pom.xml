@@ -6,7 +6,7 @@
 
     <groupId>si.matejbizjak.natsjetstream.sample</groupId>
     <artifactId>natsjetstream-sample</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Nats JetStream Sample</name>
@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <kumuluzee.version>3.12.1</kumuluzee.version>
-        <kumuluzee-nats.version>0.1-SNAPSHOT</kumuluzee-nats.version>
+        <kumuluzee-nats.version>1.0.0-SNAPSHOT</kumuluzee-nats.version>
     </properties>
 
     <dependencyManagement>

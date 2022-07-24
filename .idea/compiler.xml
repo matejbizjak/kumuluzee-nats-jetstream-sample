@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="natscore-sample" />
         <module name="kumuluzee-nats-jetstream-sample" />
+        <module name="natsjetstream-sample" />
         <module name="Nats Core Sample" />
       </profile>
     </annotationProcessing>
