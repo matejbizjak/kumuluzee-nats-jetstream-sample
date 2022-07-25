@@ -8,7 +8,7 @@ import io.nats.client.Message;
 import io.nats.client.api.PublishAck;
 import io.nats.client.impl.Headers;
 import io.nats.client.impl.NatsMessage;
-import si.matejbizjak.natsjetstream.sample.api.entity.Product;
+import si.matejbizjak.natsjetstream.sample.api.dto.Product;
 import si.matejbizjak.natsjetstream.sample.api.subscriber.ProductSubscriber;
 
 import javax.enterprise.context.RequestScoped;
@@ -17,7 +17,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -40,15 +39,13 @@ public class ProductResource {
 
     @POST
     @Path("/corn")
-    public Response postCorn() {
+    public Response postCorn(Product corn) {
         if (jetStream == null) {
             return Response.serverError().build();
         }
         try {
             String uniqueID = UUID.randomUUID().toString();
             Headers headers = new Headers().add("Nats-Msg-Id", uniqueID);
-
-            Product corn = new Product(1, "Corn", "Corn for popcorn - 1 kg", 3.2f, 12, null, LocalDateTime.now());
 
             Message message = NatsMessage.builder()
                     .subject("product.corn")
@@ -65,17 +62,15 @@ public class ProductResource {
     }
 
     @POST
-    @Path("/ananas")
-    public Response postAnanas() {
+    @Path("/apple")
+    public Response postApple(Product apple) {
         if (jetStream == null) {
             return Response.serverError().build();
         }
         try {
-            Product ananas = new Product(2, "Ananas", "Ananas from Costa Rica", 1.73f, 8, null, LocalDateTime.now());
-
             Message message = NatsMessage.builder()
-                    .subject("product.ananas")
-                    .data(SerDes.serialize(ananas))
+                    .subject("product.apple")
+                    .data(SerDes.serialize(apple))
                     .build();
 
             PublishAck publishAck = jetStream.publish(message);

@@ -162,14 +162,6 @@ which should be in a file named `log4j2.xml` and located in `src/main/resources`
     </Loggers>
 </Configuration>
 ```
-If you would like to collect NATS related logs through the KumuluzEE Logs, you have to include the following `slf4j` implementation as dependency:
-```xml
-<dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-slf4j-impl</artifactId>
-    <version>${log4j-slf4j.version}</version>
-</dependency>
-```
 
 Add the `jackson-datatype-jsr310` dependency for our custom ObjectMapper provider, so it can work with Java 8 Date & Time API.
 
@@ -309,8 +301,8 @@ public class TextResource {
     private JetStream jetStream;
 
     @POST
-    @Path("/subject1")
-    public Response postSub1() {
+    @Path("/uniqueSync/{subject}")
+    public Response postSub1(@PathParam("subject") String subject, String messageText) {
         if (jetStream == null) {
             return Response.serverError().build();
         }
@@ -319,13 +311,13 @@ public class TextResource {
             Headers headers = new Headers().add("Nats-Msg-Id", uniqueID);
 
             Message message = NatsMessage.builder()
-                    .subject("subject1")
-                    .data(SerDes.serialize("simple message"))
+                    .subject(subject)
+                    .data(SerDes.serialize(messageText))
                     .headers(headers)
                     .build();
 
             PublishAck publishAck = jetStream.publish(message);
-            return Response.ok(String.format("Message has been sent to subject %s in stream %s", message.getSubject()
+            return Response.ok(String.format("Message has been sent to subject %s in stream %s.", message.getSubject()
                     , publishAck.getStream())).build();
         } catch (IOException | JetStreamApiException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
@@ -333,19 +325,19 @@ public class TextResource {
     }
 
     @POST
-    @Path("/subject2")
-    public Response postSub2() {
+    @Path("/async/{subject}")
+    public Response postSub2(@PathParam("subject") String subject, String messageText) {
         if (jetStream == null) {
             return Response.serverError().build();
         }
         try {
             Message message = NatsMessage.builder()
-                    .subject("subject2")
-                    .data(SerDes.serialize("simple message to be pulled manually"))
+                    .subject(subject)
+                    .data(SerDes.serialize(messageText))
                     .build();
 
             CompletableFuture<PublishAck> futureAck = jetStream.publishAsync(message);
-            return Response.ok(String.format("Message has been sent to subject %s in stream %s", message.getSubject()
+            return Response.ok(String.format("Message has been sent to subject %s in stream %s.", message.getSubject()
                     , futureAck.get().getStream())).build();
         } catch (IOException | ExecutionException | InterruptedException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
@@ -370,6 +362,8 @@ With the injected JetStreamSubscription use can now use functions like `fetch()`
 @ApplicationScoped
 public class TextSubscriber {
 
+    private static final Logger LOG = LogManager.getLogger(TextSubscriber.class.getName());
+
     @Inject
     @JetStreamSubscriber(context = "context1", stream = "stream1", subject = "subject2", durable = "somethingNew")
     @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
@@ -380,7 +374,8 @@ public class TextSubscriber {
             List<Message> messages = jetStreamSubscription.fetch(3, Duration.ofSeconds(1));
             for (Message message : messages) {
                 try {
-                    System.out.println(SerDes.deserialize(message.getData(), String.class));
+                    LOG.info(String.format("Method pullMsg received (pull) message %s in subject subject2."
+                            , SerDes.deserialize(message.getData(), String.class)));
                     message.ack();
                 } catch (IOException e) {
                     message.nak();
@@ -425,10 +420,12 @@ The method will receive a message through the first method parameter. Make sure 
 ```java
 public class TextListener {
 
+    private static final Logger LOG = LogManager.getLogger(TextListener.class.getName());
+
     @JetStreamListener(context = "context1", subject = "subject1")
     @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
     public void receive(String value) {
-        System.out.println(value);
+        LOG.info(String.format("Method receive received a message %s in subject subject1.", value));
     }
 }
 ```

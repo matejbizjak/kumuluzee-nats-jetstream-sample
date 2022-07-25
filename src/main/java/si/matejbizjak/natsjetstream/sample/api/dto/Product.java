@@ -1,6 +1,8 @@
-package si.matejbizjak.natsjetstream.sample.api.entity;
+package si.matejbizjak.natsjetstream.sample.api.dto;
 
+import java.math.BigDecimal;
 import java.sql.Blob;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 public class Product {
@@ -11,18 +13,18 @@ public class Product {
 
     private String description;
 
-    private float price;
+    private BigDecimal price;
 
     private int stock;
 
     private Blob image;
 
-    private LocalDateTime addedDate;
+    private Instant addedDate;
 
     public Product() {
     }
 
-    public Product(int id, String name, String description, float price, int stock, Blob image, LocalDateTime addedDate) {
+    public Product(int id, String name, String description, BigDecimal price, int stock, Blob image, Instant addedDate) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -56,11 +58,11 @@ public class Product {
         this.description = description;
     }
 
-    public float getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -80,11 +82,11 @@ public class Product {
         this.image = image;
     }
 
-    public LocalDateTime getAddedDate() {
+    public Instant getAddedDate() {
         return addedDate;
     }
 
-    public void setAddedDate(LocalDateTime addedDate) {
+    public void setAddedDate(Instant addedDate) {
         this.addedDate = addedDate;
     }
 }

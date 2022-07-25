@@ -19,6 +19,7 @@
 
         <kumuluzee.version>3.12.1</kumuluzee.version>
         <kumuluzee-nats.version>1.0.0-SNAPSHOT</kumuluzee-nats.version>
+        <kumuluzee-logs.version>1.4.6</kumuluzee-logs.version>
     </properties>
 
     <dependencyManagement>
@@ -43,11 +44,10 @@
             <artifactId>kumuluzee-nats-jetstream</artifactId>
             <version>${kumuluzee-nats.version}</version>
         </dependency>
-
         <dependency>
-            <groupId>com.kumuluz.ee.nats</groupId>
-            <artifactId>kumuluzee-nats-core</artifactId>
-            <version>${kumuluzee-nats.version}</version>
+            <artifactId>kumuluzee-logs-log4j2</artifactId>
+            <groupId>com.kumuluz.ee.logs</groupId>
+            <version>${kumuluzee-logs.version}</version>
         </dependency>
 
         <!--        <dependency>-->
