@@ -482,17 +482,15 @@ kumuluzee:
           - tls://localhost:4223
           - opentls://localhost:4223
         tls:
-#          trust-store-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\truststore.jks
-#          trust-store-password: password2
-          certificate-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\server-cert.pem
+          trust-store-path: certs\truststore.jks
+          trust-store-password: password2
       - name: secure
         addresses:
           - tls://localhost:4224
         tls:
-#          trust-store-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\truststore.jks
-#          trust-store-password: password2
-          certificate-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\server-cert.pem
-          key-store-path: C:\Users\Matej\IdeaProjects\kumuluzee-nats-core-sample\src\main\resources\certs\keystore.jks
+          trust-store-path: certs\truststore.jks
+          trust-store-password: password2
+          key-store-path: certs\keystore.jks
           key-store-password: password
         streams:
           - name: stream2
@@ -531,16 +529,12 @@ See the next section to learn how to set up the TLS.
 
    ```
    tls:
-       ###
-       trust-store-path: ...\resources\certs\truststore.jks
+       trust-store-path: certs\truststore.jks
        trust-store-password: password2
-       # or
-       certificate-path: ...\resources\certs\server-cert.pem
-       ###
-       key-store-path: ...\resources\certs\keystore.jks
+       key-store-path: certs\keystore.jks
        key-store-password: password
    ```
-   - You can either use a truststore or server's certificate for server verification.
+   - You can either specify a full path or a path from source root (resources directory).
    - Keystore is only needed at Mutual TLS (when also verifying clients). You enable this feature with `verify: true` in the TLS settings in the NATS server configuration file.
 
 #### Examples
@@ -563,9 +557,8 @@ kumuluzee:
         addresses:
           - tls://localhost:4223
         tls:
-#          trust-store-path: C:\Users\Matej\IdeaProjects\Nats JetStream Sample\src\main\resources\certs\truststore.jks
-#          trust-store-password: password2
-          certificate-path: C:\Users\Matej\IdeaProjects\Nats JetStream Sample\src\main\resources\certs\server-cert.pem
+          trust-store-path: certs\truststore.jks
+          trust-store-password: password2
 ```
 
 You can either specify the trust store and password, or the server's certificate path.
@@ -580,11 +573,10 @@ kumuluzee:
         addresses:
           - tls://localhost:4224
         tls:
-          trust-store-path: C:\Users\Matej\IdeaProjects\Nats JetStream Sample\src\main\resources\certs\truststore.jks
-        trust-store-password: password2
-        #          certificate-path: C:\Users\Matej\IdeaProjects\Nats JetStream Sample\src\main\resources\certs\server-cert.pem
-        key-store-path: C:\Users\Matej\IdeaProjects\Nats JetStream Sample\src\main\resources\certs\keystore.jks
-        key-store-password: password
+          trust-store-path: certs\truststore.jks
+          trust-store-password: password2
+          key-store-path: certs\keystore.jks
+          key-store-password: password
 ```
 
 For Mutual TLS you also need to specify a key store.
