@@ -585,7 +585,7 @@ To build the microservice and run the example, use the commands as described in 
 ## Using NATS CLI with secure connections
 
 ```text
-nats context save secure --server nats://localhost:4224 --description 'Secure localhost' --tlscert=./client-cert.pem --tlskey=./private_key.pem --tlsca=rootCA.pem
+nats context save secure --server nats://localhost:4224 --description 'Secure localhost' --tlscert=./client-cert.pem --tlskey=./client-key.pem --tlsca=rootCA.pem
 nats context select secure
 ```
 
@@ -593,11 +593,4 @@ Now you can, for example, remove the stream `stream2` and all its messages and [
 
 ```text
 nats stream rm stream2
-```
-
-Client's private key can be extracted from keystore.jks with:
-
-```text
-keytool -importkeystore -srckeystore keystore.jks -destkeystore keystore.p12 -srcstoretype jks -deststoretype pkcs12
-(winpty) openssl pkcs12 -in keystore.p12 -nodes -nocerts -out private_key.pem
 ```
