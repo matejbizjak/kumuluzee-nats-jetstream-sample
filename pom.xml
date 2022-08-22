@@ -17,7 +17,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <kumuluzee.version>3.12.1</kumuluzee.version>
+        <kumuluzee.version>4.1.0</kumuluzee.version>
         <kumuluzee-nats.version>1.0.0-SNAPSHOT</kumuluzee-nats.version>
         <kumuluzee-logs.version>1.4.6</kumuluzee-logs.version>
     </properties>

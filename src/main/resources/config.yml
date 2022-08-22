@@ -1,4 +1,8 @@
 kumuluzee:
+  server:
+    base-url: http://localhost:8083
+    http:
+      port: 8083
   nats:
     jetstream: true
     ack-confirmation-timeout: PT5S

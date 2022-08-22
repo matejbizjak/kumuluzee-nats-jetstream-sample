@@ -20,6 +20,7 @@ services:
     command: "-c /etc/nats/tlsverify.conf"
     ports:
       - "4224:4224"
+      - "1883:1883"
     volumes:
       - ./config/:/etc/nats
       - ./certs/:/etc/nats/certs
