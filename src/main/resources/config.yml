@@ -1,8 +1,8 @@
 kumuluzee:
   server:
-    base-url: http://localhost:8083
+    base-url: http://localhost:8099
     http:
-      port: 8083
+      port: 8099
   nats:
     jetstream: true
     ack-confirmation-timeout: PT5S
@@ -53,6 +53,7 @@ kumuluzee:
           - name: stream2
             subjects:
               - product.*
+              - map.products
 #            description:
 #            retention-policy:
 #            max-consumers:

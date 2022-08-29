@@ -14,6 +14,15 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Corn\",\r\n    \"description\": \"Corn for popcorn - 1 kg\",\r\n    \"price\": 3.2,\r\n    \"stock\": 12,\r\n    \"image\": null,\r\n    \"addedDate\": \"2022-07-20T18:35:24.00Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "{{baseUrl}}/{{version}}/product/corn",
 							"host": [
@@ -29,19 +38,47 @@
 					"response": []
 				},
 				{
-					"name": "postAnanas",
+					"name": "postApple",
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 2,\r\n    \"name\": \"Apple\",\r\n    \"description\": \"Fuji Apple - 1 kg\",\r\n    \"price\": 1.2,\r\n    \"stock\": 132,\r\n    \"image\": null,\r\n    \"addedDate\": \"2022-07-20T19:35:24.00Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{baseUrl}}/{{version}}/product/ananas",
+							"raw": "{{baseUrl}}/{{version}}/product/apple",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{version}}",
 								"product",
-								"ananas"
+								"apple"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postProductsMap",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/{{version}}/product/productsMap",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{version}}",
+								"product",
+								"productsMap"
 							]
 						}
 					},
@@ -72,18 +109,28 @@
 			"name": "text",
 			"item": [
 				{
-					"name": "postSub1",
+					"name": "postUniqueSync",
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\"simple message\"",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{baseUrl}}/{{version}}/text/subject1",
+							"raw": "{{baseUrl}}/{{version}}/text/uniqueSync/subject1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{version}}",
 								"text",
+								"uniqueSync",
 								"subject1"
 							]
 						}
@@ -91,18 +138,28 @@
 					"response": []
 				},
 				{
-					"name": "postSub2",
+					"name": "postAsync",
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\"simple message to be pulled manually\"",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{baseUrl}}/{{version}}/text/subject2",
+							"raw": "{{baseUrl}}/{{version}}/text/async/subject2",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"{{version}}",
 								"text",
+								"async",
 								"subject2"
 							]
 						}

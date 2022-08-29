@@ -17,7 +17,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.UUID;
+import java.time.Instant;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -79,6 +80,38 @@ public class ProductResource {
             return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
         }
     }
+
+        @POST
+        @Path("/productsMap")
+        public Response postProductsMap() {
+            if (jetStream == null) {
+                return Response.serverError().build();
+            }
+
+            Map<String, List<Product>> customerProductsMap = new HashMap<>();
+
+            List<Product> products1 = new ArrayList<>();
+            products1.add(new Product(1, "name1", "", null, 1, null, Instant.now()));
+            products1.add(new Product(2, "name2", "", null, 2, null, Instant.now()));
+            customerProductsMap.put("1", products1);
+
+            List<Product> products2 = new ArrayList<>();
+            products2.add(new Product(3, "name3", "", null, 3, null, Instant.now()));
+            products2.add(new Product(4, "name4", "", null, 4, null, Instant.now()));
+            customerProductsMap.put("2", products2);
+
+            try {
+                Message message = NatsMessage.builder()
+                        .subject("map.products")
+                        .data(SerDes.serialize(customerProductsMap))
+                        .build();
+
+                PublishAck publishAck = jetStream.publish(message);
+                return Response.ok(String.format("Message has been sent to stream %s", publishAck.getStream())).build();
+            } catch (IOException | JetStreamApiException e) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
+            }
+        }
 
     @GET
     @Path("/pullCorn")
