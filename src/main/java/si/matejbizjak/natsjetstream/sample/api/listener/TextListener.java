@@ -16,8 +16,8 @@ public class TextListener {
 
     private static final Logger LOG = LogManager.getLogger(TextListener.class.getName());
 
-    @JetStreamListener(context = "context1", subject = "subject1")
-    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
+    @JetStreamListener(context = "context1", stream = "stream1", subject = "subject1")
+    @ConsumerConfig(base = "customConsumer", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
     public void receive(String value) {
         LOG.info(String.format("Method receive received a message %s in subject subject1.", value));
     }

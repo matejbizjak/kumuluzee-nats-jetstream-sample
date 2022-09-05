@@ -67,29 +67,29 @@ kumuluzee:
 #            template-owner:
 #            discard-policy:
 #            duplicate-window:
-    consumer-configuration:
-      - name: custom1
-        deliver-policy: all
-#        ack-policy:
-#        replay-policy:
-#        description:
-#        durable:
-#        deliver-subject:
-#        deliver-group:
-#        filter-subject:
-#        sample-frequency:
-#        start-time:
-#        ack-wait:
-#        idle-heartbeat:
-#        max-expires:
-#        inactive-threshold:
-#        start-seq:
-#        max-deliver:
-#        rate-limit:
-#        max-ack-pending:
-#        max-pull-waiting:
-#        max-batch:
-#        max-bytes:
-#        flow-control:
-#        headers-only:
-#        backoff:
+            consumers:
+              - name: customConsumer
+                deliver-policy: all
+            #        ack-policy:
+            #        replay-policy:
+            #        description:
+            #        durable:
+            #        deliver-subject:
+            #        deliver-group:
+            #        filter-subject:
+            #        sample-frequency:
+            #        start-time:
+                ack-wait: PT5S
+            #        idle-heartbeat:
+            #        max-expires:
+            #        inactive-threshold:
+            #        start-seq:
+            #        max-deliver:
+            #        rate-limit:
+            #        max-ack-pending:
+            #        max-pull-waiting:
+            #        max-batch:
+            #        max-bytes:
+            #        flow-control:
+            #        headers-only:
+            #        backoff:

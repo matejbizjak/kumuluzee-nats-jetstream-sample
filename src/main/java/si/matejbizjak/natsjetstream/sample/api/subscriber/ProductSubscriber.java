@@ -26,8 +26,8 @@ public class ProductSubscriber {
     private static final Logger LOG = LogManager.getLogger(ProductSubscriber.class.getName());
 
     @Inject
-    @JetStreamSubscriber(connection = "secure", subject = "product.corn", durable = "newCorn")
-    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
+    @JetStreamSubscriber(connection = "secure", stream = "stream2", subject = "product.corn", durable = "newCorn")
+    @ConsumerConfig(base = "customConsumer", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
     private JetStreamSubscription jetStreamSubscription;
 
     public void pullCorn() {

@@ -25,8 +25,8 @@ public class TextSubscriber {
     private static final Logger LOG = LogManager.getLogger(TextSubscriber.class.getName());
 
     @Inject
-    @JetStreamSubscriber(context = "context1", stream = "stream1", subject = "subject2", durable = "somethingNew")
-    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
+    @JetStreamSubscriber(context = "context1", stream = "stream1", subject = "subject2", durable = "textSubscriber")
+    @ConsumerConfig(base = "customConsumer", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
     private JetStreamSubscription jetStreamSubscription;
 
     public void pullMsg() {

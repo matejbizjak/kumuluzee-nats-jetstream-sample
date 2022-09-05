@@ -353,10 +353,13 @@ public class TextResource {
 To consume messages by pulling them from the server we need to create a JetStreamSubscription for each subject.
 With KumuluzEE NATS JetStream we can use a `@JetStreamSubscriber` annotation to inject a JetStreamSubscription reference.
 
-Let's create a service TextSubscriber as shown in the example below. Specify the connection details, the subject and durable name.
-Let's override the consumer configuration `custom1` by changing its deliverPolicy to `new`. Now we will only receive the messages that were published after this subscription started. 
+Let's create a service TextSubscriber as shown in the example below. Specify the connection details, the subject and 
+durable name.
+Let's override the consumer configuration `customConsumer` by changing its deliverPolicy to `new`. Now we will only 
+receive the messages that were published after this subscription started. 
 
-With the injected JetStreamSubscription use can now use functions like `fetch()`, `pull()`, `iterate()` etc. to receive new messages.
+With the injected JetStreamSubscription use can now use functions like `fetch()`, `pull()`, `iterate()` etc. to receive
+new messages.
 
 ```java
 @ApplicationScoped
@@ -365,8 +368,8 @@ public class TextSubscriber {
     private static final Logger LOG = LogManager.getLogger(TextSubscriber.class.getName());
 
     @Inject
-    @JetStreamSubscriber(context = "context1", stream = "stream1", subject = "subject2", durable = "somethingNew")
-    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
+    @JetStreamSubscriber(context = "context1", stream = "stream1", subject = "subject2", durable = "textSubscriber")
+    @ConsumerConfig(base = "customConsumer", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
     private JetStreamSubscription jetStreamSubscription;
 
     public void pullMsg() {
@@ -422,8 +425,8 @@ public class TextListener {
 
     private static final Logger LOG = LogManager.getLogger(TextListener.class.getName());
 
-    @JetStreamListener(context = "context1", subject = "subject1")
-    @ConsumerConfig(name = "custom1", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
+    @JetStreamListener(context = "context1", stream = "stream1", subject = "subject1")
+    @ConsumerConfig(base = "customConsumer", configOverrides = {@ConfigurationOverride(key = "deliver-policy", value = "new")})
     public void receive(String value) {
         LOG.info(String.format("Method receive received a message %s in subject subject1.", value));
     }
@@ -456,8 +459,8 @@ We can also specify custom consumer configurations and jetStream context setting
 ```yaml
 kumuluzee:
   nats:
-    response-timeout: PT5S
     jetstream: true
+    ack-confirmation-timeout: PT5S
     servers:
       - name: default
         addresses:
@@ -492,11 +495,13 @@ kumuluzee:
         streams:
           - name: stream2
             subjects:
-              - category.*
+              - product.*
+              - map.products
             storage-type: memory
-    consumer-configuration:
-      - name: custom1
-        deliver-policy: all
+            consumers:
+              - name: customConsumer
+                deliver-policy: all
+                ack-wait: PT5S
 ```
 
 See the next section to learn how to set up the TLS.
