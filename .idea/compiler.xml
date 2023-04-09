@@ -6,10 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="natscore-sample" />
-        <module name="kumuluzee-nats-jetstream-sample" />
         <module name="natsjetstream-sample" />
-        <module name="Nats Core Sample" />
       </profile>
     </annotationProcessing>
   </component>

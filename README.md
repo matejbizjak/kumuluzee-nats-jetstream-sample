@@ -482,15 +482,15 @@ kumuluzee:
           - tls://localhost:4223
           - opentls://localhost:4223
         tls:
-          trust-store-path: certs\truststore.jks
+          trust-store-path: certs/truststore.jks
           trust-store-password: password2
       - name: secure
         addresses:
           - tls://localhost:4224
         tls:
-          trust-store-path: certs\truststore.jks
+          trust-store-path: certs/truststore.jks
           trust-store-password: password2
-          key-store-path: certs\keystore.jks
+          key-store-path: certs/keystore.jks
           key-store-password: password
         streams:
           - name: stream2
@@ -531,9 +531,9 @@ See the next section to learn how to set up the TLS.
 
    ```
    tls:
-       trust-store-path: certs\truststore.jks
+       trust-store-path: certs/truststore.jks
        trust-store-password: password2
-       key-store-path: certs\keystore.jks
+       key-store-path: certs/keystore.jks
        key-store-password: password
    ```
    - You can either specify a full path or a path from source root (resources directory).
@@ -559,7 +559,7 @@ kumuluzee:
         addresses:
           - tls://localhost:4223
         tls:
-          trust-store-path: certs\truststore.jks
+          trust-store-path: certs/truststore.jks
           trust-store-password: password2
 ```
 
@@ -575,9 +575,9 @@ kumuluzee:
         addresses:
           - tls://localhost:4224
         tls:
-          trust-store-path: certs\truststore.jks
+          trust-store-path: certs/truststore.jks
           trust-store-password: password2
-          key-store-path: certs\keystore.jks
+          key-store-path: certs/keystore.jks
           key-store-password: password
 ```
 
