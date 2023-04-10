@@ -42,7 +42,7 @@ You can do this easily with Docker Compose using the configuration file we provi
 
 Simply run:
 ```
-docker-compose -f util/run-nats-server/run-nats-servers.yaml up
+docker-compose -f util/run-nats-server/run-nats-servers.yaml up -d
 ```
 
 ## Usage
@@ -51,7 +51,7 @@ This example uses Docker Compose to set up NATS servers and maven to build and r
 
 1. Start the NATS server instances:
 ```
-docker-compose -f util/run-nats-server/run-nats-servers.yaml up 
+docker-compose -f util/run-nats-server/run-nats-servers.yaml up -d
 ```
 2. Build the sample using maven:
 ```
