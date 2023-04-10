@@ -245,45 +245,6 @@ public class NatsMapperProvider implements NatsObjectMapperProvider {
 
 #### Producer
 
-[//]: # (Create the interface SimpleClient, annotate it with `@RegisterRestClient` and specify the name of the NATS connection that the client will use.)
-
-[//]: # ()
-[//]: # (Annotate each producer method with `@Subject`. If you want to specify the subject dynamically, use parameter annotation &#40;as you can see at the method `sendSimpleDynamicSubjectResponse&#40;&#41;`&#41;.)
-
-[//]: # ()
-[//]: # (```java)
-
-[//]: # (@RegisterNatsClient&#40;connection = "default"&#41;)
-
-[//]: # (public interface SimpleClient {)
-
-[//]: # ()
-[//]: # (    @Subject&#40;value = "simple1"&#41;)
-
-[//]: # (    void sendSimple&#40;String value&#41;;)
-
-[//]: # ()
-[//]: # (    String sendSimpleDynamicSubjectResponse&#40;@Subject String subject, String value&#41;;)
-
-[//]: # ()
-[//]: # (    @Subject&#40;value = "simple2"&#41;)
-
-[//]: # (    String sendSimpleResponse&#40;String value&#41;;)
-
-[//]: # ()
-[//]: # (    @Subject&#40;value = "simple_async"&#41;)
-
-[//]: # (    Future<String> sendSimpleResponseAsync&#40;String value&#41;;)
-
-[//]: # ()
-[//]: # (    @Subject&#40;"empty"&#41;)
-
-[//]: # (    String sendEmptyPayload&#40;String value&#41;;)
-
-[//]: # (})
-
-[//]: # (```)
-
 Implement the first JAX-RS resource `TextResource` with POST methods that initiate producing of the messages.
 Inject the JetStream context using `@Inject` and `@JetStreamProducer` and specify the context name that we will later configure in the configurations. Let's leave the default connection for now.
 
