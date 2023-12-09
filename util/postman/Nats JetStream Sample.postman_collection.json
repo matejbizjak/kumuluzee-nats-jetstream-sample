@@ -66,6 +66,34 @@
 					"response": []
 				},
 				{
+					"name": "postAnyProduct",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 2,\r\n    \"name\": \"Lemon\",\r\n    \"description\": \"Shiny lemon - 250g\",\r\n    \"price\": 3.2,\r\n    \"stock\": 12,\r\n    \"image\": null,\r\n    \"addedDate\": \"2022-07-20T19:35:24.00Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{version}}/product/any-product",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{version}}",
+								"product",
+								"any-product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "postProductsMap",
 					"request": {
 						"method": "POST",
